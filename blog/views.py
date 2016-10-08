@@ -40,9 +40,44 @@ def add_entry_get():
 @app.route("/entry/add", methods=["POST"])
 def add_entry_post():
     entry = Entry(
-        title=request.form["title"],
-        content=request.form["content"],
+        title = request.form["title"],
+        content = request.form["content"],
     )
     session.add(entry)
     session.commit()
     return redirect(url_for("entries"))
+    
+# View single entry
+@app.route("/entry/<int:id>")
+def single_entry(id):
+    entry =  session.query(Entry).get(id)
+    return render_template("single_entry.html",
+        entry=entry)
+        
+# Edit single entry
+@app.route("/entry/<int:id>/edit", methods=["GET", "POST"])
+def edit_entry(id):
+    entry = session.query(Entry).get(id)
+    if request.method == "POST":
+        entry.title = request.form["title"],
+        entry.content = request.form["content"],
+        entry.id = id
+        session.add(entry)
+        session.commit()
+        return redirect(url_for("entries"))
+    return render_template("edit_entry.html", 
+        entry_title=entry.title,
+        entry_content=entry.content)
+        
+# Delete entry
+@app.route("/entry/<int:id>/delete", methods=["GET", "POST"])
+def delete_entry(id):
+    entry = session.query(Entry).get(id)
+    if request.method == "POST":
+        session.delete(entry)
+        session.commit()
+        return redirect(url_for("entries"))
+    return render_template("delete_entry.html", entry = entry)
+    
+        
+    

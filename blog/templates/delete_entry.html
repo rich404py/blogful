@@ -1,0 +1,15 @@
+{% import "macros.html" as macros %}
+{% extends "base.html" %}
+{% block content %}
+
+{{ macros.render_entry(entry) }}
+
+<form method="POST">
+    <legend>Delete this entry?</legend>
+    <p>
+        <input type="radio" name="answer" value="yes">Confirm</br>
+        <input type="radio" name="answer" value="no">Cancel</br>
+    </p>
+        <input type="submit" value="Delete"</button>
+</form>
+{% endblock %}
